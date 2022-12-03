@@ -1,3 +1,6 @@
-<mat-toolbar color="primary">
-    <span>My App</span>
+<mat-toolbar color="primary" class="head">
+    <!-- <span>My App</span> -->
+    <span>Today : {{actualDate$  | date: ' EEEE dd/MM/yyyy' }}</span>
+    <span>1 USD : {{usd$ | async }} UAH</span>
+    <span>1 EUR : {{eur$ | async }} UAH</span>
 </mat-toolbar>

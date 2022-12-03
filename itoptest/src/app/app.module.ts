@@ -7,6 +7,9 @@ import {MatCardModule} from '@angular/material/card';
 import { HeaderComponent } from './components/header/header.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import {MatDividerModule} from '@angular/material/divider';
+
 
 
 
@@ -20,7 +23,9 @@ import {MatIconModule} from '@angular/material/icon';
     BrowserAnimationsModule,
     MatCardModule,
     MatToolbarModule,
-    MatIconModule
+    MatIconModule,
+    HttpClientModule,
+    MatDividerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
