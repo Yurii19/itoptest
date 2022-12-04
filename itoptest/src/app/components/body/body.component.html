@@ -1,7 +1,7 @@
 <div class="body-container">
   <div class="currency-controls">
     <mat-form-field appearance="fill" class="form">
-      <mat-label>Select an currency</mat-label>
+      <mat-label>Select a currency</mat-label>
       <mat-select
         disableRipple
         panelClass="select-panel"
@@ -29,7 +29,7 @@
 
   <div class="currency-controls">
     <mat-form-field appearance="fill" class="form">
-      <mat-label>Select an currency</mat-label>
+      <mat-label>Select a currency</mat-label>
       <mat-select disableRipple panelClass="select-panel" [formControl]="currencyTwo">
         <mat-option *ngFor="let currency of currencies" [value]="currency">{{
           currency.name

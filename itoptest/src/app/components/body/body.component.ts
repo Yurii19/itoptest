@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { combineLatest, combineLatestWith, concat, forkJoin, merge, Observable, Subject, take, zip } from 'rxjs';
+import { combineLatest, zip } from 'rxjs';
 import { CurrencyService } from 'src/app/services/currency.service';
-import { CURRENCIES, Currencies, ICurrency } from 'src/app/types';
-//import { CURRENCIES } from '../types';
+import { CURRENCIES, ICurrency } from 'src/app/types';
 
 @Component({
   selector: 'app-body',
@@ -11,31 +10,34 @@ import { CURRENCIES, Currencies, ICurrency } from 'src/app/types';
   styleUrls: ['./body.component.scss'],
 })
 export class BodyComponent implements OnInit {
+
   currencyOne: FormControl = new FormControl();
   currencyTwo: FormControl = new FormControl();
-  currencyOneAmount: FormControl = new FormControl();
-  currencyTwoAmount: FormControl = new FormControl();
+  currencyOneAmount: FormControl = new FormControl({
+    value: null,
+    disabled: true,
+  });
+  currencyTwoAmount: FormControl = new FormControl({
+    value: null,
+    disabled: true,
+  });
 
   currencies: ICurrency[] = Object.values(CURRENCIES);
 
-  //coeficient: Subject<number> = new Subject();
-  coeficient: number = 36.65;
+  rate: number = -1;
 
-  //c$: Observable<any> = new Observable();
+  constructor(private currencyService: CurrencyService) {}
 
-  constructor(private currencyService: CurrencyService) {
-    // this.currencyOne.setValue(this.currencies[0])
-  }
   ngOnInit(): void {
-   zip(
+    combineLatest([
       this.currencyOne.valueChanges,
-      this.currencyTwo.valueChanges
-    ).subscribe(d => console.log(d))
-
-   // this.c$.subscribe(d => console.log(d))
-    //this.currencyOne.valueChanges.subscribe(d => console.log(d))
-    // this.currencyOne.valueChanges.subscribe(d => console.log(d))
-    // this.currencyTwo.valueChanges.subscribe(d => console.log(d))
+      this.currencyTwo.valueChanges,
+    ]).subscribe((curencies: ICurrency[]) => {
+      this.rate = this.currencyService.getRate(curencies);
+      this.currencyOneAmount.enable();
+      this.currencyTwoAmount.enable();
+      console.log('combineLatest : ', this.rate)
+    });
   }
 
   setCoeficient() {}
@@ -50,13 +52,13 @@ export class BodyComponent implements OnInit {
 
   setAmountTwo() {
     const inputAmount = this.currencyOneAmount.value;
-    const outputAmount = inputAmount / this.coeficient;
+    const outputAmount = inputAmount / this.rate;
     this.currencyTwoAmount.setValue(outputAmount.toFixed(2));
   }
 
   setAmountOne() {
     const inputAmount = this.currencyTwoAmount.value;
-    const outputAmount = inputAmount * this.coeficient;
+    const outputAmount = inputAmount * this.rate;
     this.currencyOneAmount.setValue(outputAmount.toFixed(2));
   }
 }

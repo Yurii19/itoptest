@@ -9,6 +9,11 @@
 }
 .select-panel{
     * {
-        color: white;
+        // color: white;
     }
 }
+
+::ng-deep .mat-form-field-placeholder{
+
+    color:red;
+  }
