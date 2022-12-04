@@ -11,8 +11,8 @@ import { ICurrencyEntry } from 'src/app/types';
 
 export class HeaderComponent implements OnInit {
 
-  usd$: Observable<number> = this.currencyService.getUsdCourse().pipe(map(d => d.rateBuy));
-  eur$: Observable<number> = this.currencyService.getEurCourse().pipe(map(d => d.rateBuy));
+  usd$: Observable<number> = this.currencyService.getUsdCourse().pipe(map(d => (d.rateBuy + d.rateSell)/2));
+  eur$: Observable<number> = this.currencyService.getEurCourse().pipe(map(d => (d.rateBuy + d.rateSell)/2));
   actualDate$: any = new Date();
 
   constructor(
