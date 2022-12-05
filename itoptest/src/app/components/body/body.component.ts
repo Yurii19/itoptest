@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { combineLatest, zip } from 'rxjs';
+import { combineLatest, Subject, takeUntil } from 'rxjs';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { CURRENCIES, ICurrency } from 'src/app/types';
 
@@ -9,8 +9,7 @@ import { CURRENCIES, ICurrency } from 'src/app/types';
   templateUrl: './body.component.html',
   styleUrls: ['./body.component.scss'],
 })
-export class BodyComponent implements OnInit {
-
+export class BodyComponent implements OnInit, OnDestroy {
   currencyOne: FormControl = new FormControl();
   currencyTwo: FormControl = new FormControl();
   currencyOneAmount: FormControl = new FormControl({
@@ -26,6 +25,8 @@ export class BodyComponent implements OnInit {
 
   rate: number = -1;
 
+  destroy$: Subject<any> = new Subject<any>();
+
   constructor(private currencyService: CurrencyService) {}
 
   ngOnInit(): void {
@@ -33,32 +34,41 @@ export class BodyComponent implements OnInit {
       this.currencyOne.valueChanges,
       this.currencyTwo.valueChanges,
     ]).subscribe((curencies: ICurrency[]) => {
-      this.rate = this.currencyService.getRate(curencies);
+      this.currencyService
+        .getRate(curencies)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((rate: number) => {
+          this.rate = rate;
+          this.setAmountTwo(rate);
+        });
       this.currencyOneAmount.enable();
       this.currencyTwoAmount.enable();
-      console.log('combineLatest : ', this.rate)
     });
+
   }
 
-  setCoeficient() {}
-
-  selectCurrencyOne() {
-    this.setAmountTwo();
+  ngOnDestroy(): void {
+    this.destroy$.next(null);
+    this.destroy$.unsubscribe();
   }
 
-  selectCurrencyTwo() {
-    this.setAmountOne();
+  selectAmountOne() {
+    this.setAmountTwo(this.rate);
   }
 
-  setAmountTwo() {
+  selectAmountTwo() {
+    this.setAmountOne(this.rate);
+  }
+
+  setAmountTwo(rate: number) {
     const inputAmount = this.currencyOneAmount.value;
-    const outputAmount = inputAmount / this.rate;
+    const outputAmount = inputAmount * rate;
     this.currencyTwoAmount.setValue(outputAmount.toFixed(2));
   }
 
-  setAmountOne() {
+  setAmountOne(rate: number) {
     const inputAmount = this.currencyTwoAmount.value;
-    const outputAmount = inputAmount * this.rate;
+    const outputAmount = inputAmount / rate;
     this.currencyOneAmount.setValue(outputAmount.toFixed(2));
   }
 }

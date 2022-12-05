@@ -6,7 +6,6 @@
         disableRipple
         panelClass="select-panel"
         [formControl]="currencyOne"
-        (selectionChange)="selectCurrencyOne()"
       >
         <mat-option *ngFor="let currency of currencies" [value]="currency">{{
           currency.name
@@ -22,7 +21,7 @@
         min="0"
         placeholder="0"
         [formControl]="currencyOneAmount"
-        (change)="selectCurrencyOne()"
+        (change)="selectAmountOne()"
       />
     </mat-form-field>
   </div>
@@ -30,7 +29,11 @@
   <div class="currency-controls">
     <mat-form-field appearance="fill" class="form">
       <mat-label>Select a currency</mat-label>
-      <mat-select disableRipple panelClass="select-panel" [formControl]="currencyTwo">
+      <mat-select
+        disableRipple
+        panelClass="select-panel"
+        [formControl]="currencyTwo"
+      >
         <mat-option *ngFor="let currency of currencies" [value]="currency">{{
           currency.name
         }}</mat-option>
@@ -45,7 +48,7 @@
         min="0"
         placeholder="0"
         [formControl]="currencyTwoAmount"
-        (change)="selectCurrencyTwo()"
+        (change)="selectAmountTwo()"
       />
     </mat-form-field>
   </div>
