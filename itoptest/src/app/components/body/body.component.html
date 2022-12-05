@@ -1,0 +1,55 @@
+<div class="body-container">
+  <div class="currency-controls">
+    <mat-form-field appearance="fill" class="form">
+      <mat-label>Select a currency</mat-label>
+      <mat-select
+        disableRipple
+        panelClass="select-panel"
+        [formControl]="currencyOne"
+      >
+        <mat-option *ngFor="let currency of currencies" [value]="currency">{{
+          currency.name
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form">
+      <mat-label>Input amount</mat-label>
+      <input
+        matInput
+        type="number"
+        min="0"
+        placeholder="0"
+        [formControl]="currencyOneAmount"
+        (change)="selectAmountOne()"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="currency-controls">
+    <mat-form-field appearance="fill" class="form">
+      <mat-label>Select a currency</mat-label>
+      <mat-select
+        disableRipple
+        panelClass="select-panel"
+        [formControl]="currencyTwo"
+      >
+        <mat-option *ngFor="let currency of currencies" [value]="currency">{{
+          currency.name
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form">
+      <mat-label>Input amount</mat-label>
+      <input
+        matInput
+        type="number"
+        min="0"
+        placeholder="0"
+        [formControl]="currencyTwoAmount"
+        (change)="selectAmountTwo()"
+      />
+    </mat-form-field>
+  </div>
+</div>
